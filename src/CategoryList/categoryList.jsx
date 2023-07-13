@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "../axios";
-import Loading from "../Loading.jsx/loading";
+import Loading from "../Loading/loading";
 
 const CategoryList = () => {
   const [loading, setLoading] = useState(true);
@@ -23,13 +23,13 @@ const CategoryList = () => {
     return (
       <ul className="nav">
         <li className="nav-item">
-          <a href="#" className="nav-link">
+          <a href="/" className="nav-link">
             همه فست فود ها
           </a>
         </li>
         {categories.map((category) => (
           <li className="nav-item" key={category.id}>
-            <a href="#" className="nav-link">
+            <a href="/" className="nav-link">
               {category.name}
             </a>
           </li>

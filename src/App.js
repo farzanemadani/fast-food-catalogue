@@ -4,6 +4,7 @@ import CategoryList from "./CategoryList/categoryList";
 import { useEffect, useState } from "react";
 import axios from "./axios";
 import FastFoodList from "./FastFoodList/fastFoodList";
+import Loading from "./Loading/loading";
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -24,7 +25,7 @@ function App() {
 
   const renderContent = () => {
     if (loading) {
-      return <loading theme="dark" />;
+      return <Loading theme="dark" />;
     }
     return <FastFoodList fastFoodItems={fastFoodItems} />;
   };

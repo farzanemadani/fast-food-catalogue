@@ -1,65 +1,46 @@
-import "./App.css";
-import Header from "./Header/header";
-import CategoryList from "./CategoryList/categoryList";
 import { useEffect, useState } from "react";
-import axios from "./axios";
-import FastFoodList from "./FastFoodList/fastFoodList";
+import "./App.css";
+import CategoryList from "./CategoryList/categoryList";
+import Header from "./Header/header";
 import Loading from "./Loading/loading";
+import FastFoodList from "./FastFoodList/fastFoodList";
 import SearchBar from "./SearchBar/searchBar";
 import notFound from "./assets/images/404.png";
+import useAxios from "./useAxios";
 
 function App() {
-  const [loading, setLoading] = useState(false);
-  const [fastFoodItems, setFastFoodItems] = useState([]);
+  const [url, setUrl] = useState("/FastFood/list");
+  const [fastFoodItems, , loading] = useAxios({
+    url,
+  });
 
-  const fetchData = async (categoryId = null) => {
-    setLoading(true);
-    const response = await axios.get(
-      `/FastFood/list${categoryId ? "?categoryId=" + categoryId : ""}`
-    );
-    setLoading(false);
-    setFastFoodItems(response.data);
+  const filterItems = (categoryId) => {
+    setUrl(`/FastFood/list/${categoryId ? "?categoryId=" + categoryId : ""}`);
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const searchItems = async (term) => {
+    setUrl(`/FastFood/search/${term ? "?term=" + term : ""}`);
+  };
 
   const renderContent = () => {
     if (loading) {
       return <Loading theme="dark" />;
     }
-    console.log("fastFoodItems", fastFoodItems);
+
     if (fastFoodItems.length === 0) {
       return (
-        <div>
+        <>
           <div className="alert alert-warning text-center">
             برای کلیدواژه فوق هیچ آیتمی یافت نشد
           </div>
-          <img
-            alt="404"
-            className="mx-auto mt-5 d-block fade-in-horiz"
-            src={notFound}
-          />
-        </div>
+          <img className="mx-auto mt-5 d-block fade-in-horiz" src={notFound} />
+        </>
       );
     }
 
     return <FastFoodList fastFoodItems={fastFoodItems} />;
   };
 
-  const filterItems = (categoryId) => {
-    fetchData(categoryId);
-  };
-
-  const searchItems = async (term) => {
-    setLoading(true);
-    const response = await axios.get(
-      `/FastFood/search${term ? "?term=" + term : ""}`
-    );
-    setLoading(false);
-    setFastFoodItems(response.data);
-  };
   return (
     <div className="wrapper bg-faded-dark">
       <Header></Header>
